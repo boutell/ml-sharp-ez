@@ -88,23 +88,24 @@ Yes, it looks like everybody is a handmade doll and the model doesn't try to sim
 
 If you add more images, just run `./convert` and `./generate-website` again. Existing files are not regenerated, so if you really want them to be, remove the existing `.ply` files from the `./output` directory first. However, note that browsers will probably cache the old ones anyway. My advice for that is to change the filenames.
 
-## "Hey, it's slow"
+# "Hey, it's slow"
 
 Yeah, if you don't have an NVIDIA card it'll probably wind up using your CPU rather than your GPU unless you do some patching. So you won't get the "one second" results you may have seen mentioned. But it still does the job in about a minute per image even on my relatively wimpy AMD laptop. And in just 18 seconds on my Macbook Pro! Whaddaya want, it's going to space.
 
-## "I found a bug / I have an idea"
+# "I found a bug / I have an idea"
 
 Pull requests and github issues welcome. Remember, we have to abide by Apple's license, this is a research tool not a product.
 
 Contributions to get the GPU working for more people more of the time would be great.
 
-## How do I participate in research?
+# Apple's license says it's for research. How do I participate in research?
 
-Apple's license doesn't specify what research might look like for each person. I suggest providing **helpful, constructive** feedback on interesting results as well as `ml-sharp-ez` bugs via [github issues on ml-sharp](https://github.com/apple/ml-sharp/issues).
+I suggest providing **helpful, constructive** feedback on interesting results as well as `ml-sharp-ez` bugs via [github issues on ml-sharp](https://github.com/apple/ml-sharp/issues).
 
 If you encounter a bug outside of the `sharp` command itself, please submit [an issue on ml-sharp-ez](https://github.com/boutell/ml-sharp-ez/issues) instead.
 
-## Thanks
+# Thanks
 
 * Thanks to Apple, of course, for allowing research use of `ml-sharp`.
 * Thanks to the ThreeJS team.
+* Thanks to Felix Hirt for the [Gaussian Decimator](https://github.com/feel3x/Gaussian_Decimator) utility, used here to simplify the splat files just enough for a good experience on the Quest 3.
