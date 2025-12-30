@@ -1,0 +1,21 @@
+#!/bin/bash
+
+source ./detect-python
+
+(
+  git clone https://github.com/apple/ml-sharp &&
+  cd ml-sharp &&
+  # sudo apt-get install python3-venv
+  $PYTHON -m venv ./python-env &&
+  source ./python-env/bin/activate &&
+  pip install -r requirements.txt &&
+
+  git clone https://github.com/feel3x/Gaussian_Decimator &&
+  cd Gaussian_Decimator/ &&
+  pip install torch-scatter -f https://data.pyg.org/whl/torch-2.8.0+cpu.html &&
+  pip install -r requirements.txt &&
+  cd .. &&
+  mkdir -p output
+) || exit 1
+
+echo "Great! You are set up to use the ./photo-to-ply script."

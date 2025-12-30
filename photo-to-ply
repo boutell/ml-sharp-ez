@@ -1,0 +1,27 @@
+#!/bin/bash
+
+source ./detect-python
+
+(
+  cd ml-sharp &&
+  source ./python-env/bin/activate &&
+  for file in ../input/*; do
+    BASE=`basename file` || exit 1
+    if [ -f "../output/$BASE.ply" ]; then
+      echo "../output/$BASE.ply exists, skipping"
+    else
+      # Generate splat from photo
+      sharp predict -i "$file" -o ../output || exit 1
+    fi
+    if [ -f "../output/$BASE-reduced.ply" ]; then
+      echo "../output/$BASE-reduced.ply exists, skipping"
+    else
+      # Decimate (adjust --percentage as needed)
+      python Gaussian_Decimator/decimate.py \
+        --path_to_model "../output/$BASE.ply" \
+        --save_path "../output/$BASE-reduced.ply" || exit 1
+    fi
+  done
+) &&
+echo "Conversion complete."
+

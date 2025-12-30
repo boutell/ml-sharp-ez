@@ -1,0 +1,8 @@
+if command -v python3 &> /dev/null && python3 --version 2>&1 | grep -q "^Python 3\."; then
+  PYTHON=python3
+elif command -v python &> /dev/null && python --version 2>&1 | grep -q "^Python 3\."; then
+  PYTHON=python
+else
+  echo "Can't find python 3.x on your system. Install it as python3 or python."
+  exit 1
+fi
