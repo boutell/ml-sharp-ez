@@ -1,4 +1,4 @@
-`ml-sharp-ez` helps you take a collection of still images and turn them into "3-D splat" scenes you can explore in VR, using any WebXR-capable device, such as an Oculus Quest 3 (tested) or Apple Vision Pro (untested).
+`ml-sharp-ez` helps you take a collection of still images and turn them into a collection of "3-D splat" scenes you can explore in VR, using any WebXR-capable device, such as an Oculus Quest 3 (tested) or Apple Vision Pro (untested).
 
 This package is intended to democratize participation in 2d-3d image conversion research by easing the use of Apple's [ml-sharp model](https://github.com/apple/ml-sharp), which converts still images into 3d splat files in `.ply` format. This package then packs them up as a little WebXR application for headsets. It's pretty cool, but keep in mind you [must still abide by Apple's license for the model](https://github.com/apple/ml-sharp/blob/main/LICENSE_MODEL).
 
