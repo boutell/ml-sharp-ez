@@ -22,7 +22,8 @@ sudo apt-get install python3-venv
 Run:
 
 ```bash
-# cd into this repo you just checked out
+git clone https://github.com/boutell/ml-sharp-ez
+# always cd into the repo
 cd ml-sharp-ez 
 ./install
 ```
