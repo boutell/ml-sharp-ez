@@ -101,9 +101,11 @@ Contributions to get the GPU working for more people more of the time would be g
 
 # Apple's license says it's for research. How do I participate in research?
 
-I suggest providing **helpful, constructive** feedback on interesting results as well as `ml-sharp-ez` bugs via [github issues on ml-sharp](https://github.com/apple/ml-sharp/issues).
+I suggest providing **helpful, constructive** feedback on interesting results, as well as reporting any bugs you encounter when the `sharp` command itself is running, via [github issues on Apple's ml-sharp repo](https://github.com/apple/ml-sharp/issues).
 
-If you encounter a bug outside of the `sharp` command itself, please submit [an issue on ml-sharp-ez](https://github.com/boutell/ml-sharp-ez/issues) instead.
+But if you encounter a bug outside of the `sharp` command itself, i.e. in my `install` script or other parts of `convert` or `generate-website`, please submit [an issue on ml-sharp-ez](https://github.com/boutell/ml-sharp-ez/issues) instead.
+
+If you're not sure, start by reporting it on `ml-sharp-ez`.
 
 # Thanks
 
