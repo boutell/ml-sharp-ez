@@ -2,7 +2,13 @@ This package is intended to democratize participation in 2d-3d image conversion 
 
 # Before you install
 
-Make sure you have Python available as either `python3` or `python`, and that it is at 3.x version.
+* Make sure you have Python 3.x available as either `python3` or `python`.
+* If you are on Debian, you may need to separately install `venv` support:
+
+```bash
+# I had to do this on Debian 13
+sudo apt-get install python3-venv
+```
 
 # Installing
 
@@ -15,6 +21,8 @@ cd ml-sharp-ez
 ```
 
 If there are any errors you will need to resolve them before proceeding.
+
+It is OK to run the install script more than once if you have to fix issues and try again.
 
 # Generating `.ply` 3d splat files from your JPEGs
 
@@ -71,4 +79,4 @@ If you add more images, just run `./photo-to-ply` and `./generate-website` again
 
 ## "Hey, it's slow"
 
-Yeah, if you don't have an NVIDIA card it'll probably wind up using your CPU rather than your GPU unless you do some patching. So you won't get the "one second" results you may have seen mentioned. But it still does the job in about a minute per image even on my relatively wimpy Intel laptop. And in just 18 seconds on my Macbook Pro! So it's still pretty cool.
+Yeah, if you don't have an NVIDIA card it'll probably wind up using your CPU rather than your GPU unless you do some patching. So you won't get the "one second" results you may have seen mentioned. But it still does the job in about a minute per image even on my relatively wimpy AMD laptop. And in just 18 seconds on my Macbook Pro! So it's still pretty cool.
