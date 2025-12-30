@@ -1,9 +1,12 @@
-This package is intended to democratize participation in 2d-3d image conversion research by easing the use of Apple's ml-sharp model, which converts still images into 3d splat files in `.ply` format. It's pretty cool, but keep in mind you [must still abide by Apple's license for the model](https://github.com/apple/ml-sharp/blob/main/LICENSE_MODEL).
+`ml-sharp-ez` helps you take a collection of still images and turn them into "3-D splat" scenes you can explore in VR.
+
+This package is intended to democratize participation in 2d-3d image conversion research by easing the use of Apple's [ml-sharp model](https://github.com/apple/ml-sharp), which converts still images into 3d splat files in `.ply` format. It's pretty cool, but keep in mind you [must still abide by Apple's license for the model](https://github.com/apple/ml-sharp/blob/main/LICENSE_MODEL).
 
 # Before you install
 
-* Make sure you have Python 3.x available as either `python3` or `python`.
-* If you are on Debian, you may need to separately install `venv` support:
+* You must have MacOS, Linux, WSL or similar. Unfortunately these scripts won't run on vanilla Windows.
+* Make sure you have Python 3.x available as either `python3` or `python` (try `python3 --version` and `python --version`).
+* If you are on Debian Linux and perhaps other distros, you may need to separately install `venv` support:
 
 ```bash
 # I had to do this on Debian 13
@@ -59,7 +62,7 @@ Then visit the resulting test site at:
 
 http://localhost:8000
 
-However note you probably will not have a usable "Enter VR" button this way, but you'll still be able to experience the 3d image using the mouse-based navigation.
+However note you probably will not have a usable "Enter VR" button this way. It's just a way to test drive your 3d scenes using mouse-based navigation.
 
 To enable the "Enter VR" button, you will need to deploy the `./website` folder to the static hosting of your choice, which must support HTTPS. But just about everything comes with HTTPS support these days.
 
@@ -88,3 +91,5 @@ Yeah, if you don't have an NVIDIA card it'll probably wind up using your CPU rat
 ## "I found a bug / I have an idea"
 
 Pull requests and github issues welcome. Remember, we have to abide by Apple's license, this is a research tool not a product.
+
+Contributions to get the GPU working for more people more of the time would be great.

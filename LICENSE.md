@@ -1,4 +1,4 @@
-Please note that this license covers the `ml-sharp-ez` scripts, NOT the `ml-sharp` package from Apple, which is released under its own "research purposes only" license. This package is intended to democratize research, you must still abide by Apple's license for the model. Please see:
+Please note that this license covers the `ml-sharp-ez` scripts, NOT the `ml-sharp` package from Apple, which is released under its own "research purposes only" license. This package is intended to democratize research, you must still abide by Apple's licenses both for ml-sharp and the model itself. Please see:
 
 https://github.com/apple/ml-sharp
 
