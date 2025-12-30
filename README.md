@@ -1,6 +1,6 @@
 `ml-sharp-ez` helps you take a collection of still images and turn them into "3-D splat" scenes you can explore in VR.
 
-This package is intended to democratize participation in 2d-3d image conversion research by easing the use of Apple's [ml-sharp model](https://github.com/apple/ml-sharp), which converts still images into 3d splat files in `.ply` format. It's pretty cool, but keep in mind you [must still abide by Apple's license for the model](https://github.com/apple/ml-sharp/blob/main/LICENSE_MODEL).
+This package is intended to democratize participation in 2d-3d image conversion research by easing the use of Apple's [ml-sharp model](https://github.com/apple/ml-sharp), which converts still images into 3d splat files in `.ply` format. This package then packs them up as a little WebXR application for headsets. It's pretty cool, but keep in mind you [must still abide by Apple's license for the model](https://github.com/apple/ml-sharp/blob/main/LICENSE_MODEL).
 
 # Before you install
 
@@ -93,3 +93,8 @@ Yeah, if you don't have an NVIDIA card it'll probably wind up using your CPU rat
 Pull requests and github issues welcome. Remember, we have to abide by Apple's license, this is a research tool not a product.
 
 Contributions to get the GPU working for more people more of the time would be great.
+
+## Thanks
+
+* Thanks to Apple, of course, for allowing research use of `ml-sharp`.
+* Thanks to the ThreeJS team.
