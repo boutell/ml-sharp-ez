@@ -59,24 +59,32 @@ Then visit the resulting test site at:
 
 http://localhost:8000
 
-However note you probably will not have a usable "Enter VR" button this way.
+However note you probably will not have a usable "Enter VR" button this way, but you'll still be able to experience the 3d image using the mouse-based navigation.
 
-For that, you will need to deploy the `./website` folder to the static hosting of your choice, which must support HTTPS, otherwise the "Enter VR" buttons will not work. But just about everything comes with HTTPS support these days.
+To enable the "Enter VR" button, you will need to deploy the `./website` folder to the static hosting of your choice, which must support HTTPS. But just about everything comes with HTTPS support these days.
 
-Then you'll be able to open it from your Quest 3 or other headset.
+Then you'll be able to access it from your Quest 3 or other headset and click "Enter VR."
 
-Yes, you can deploy it as a subdirectory of another site if you want to.
+(Yes, you can deploy `./website` as a subdirectory of another site if you want to.)
 
-**The website is built with the reduced-size `.ply` files** to prevent the Quest 3 from juddering in a very unpleasant manner. If you have something more hardcore, feel free to patch the `./generate-website` script.
+**The website is built with reduced-size `.ply` files** to prevent the Quest 3 from juddering in a very unpleasant manner. If you have something more hardcore, feel free to patch the `./generate-website` script.
 
 > Note: I don't know for a scientific fact whether the issue with large splat files is the Quest 3 itself or something more specific to WebXR and ThreeJS. Feedback on this is welcome.
 
-Once you have successfully opened the page on your Quest 3 or other WebXR headset, be sure to click "Enter VR." Behold your image... clear some space first in your living room... and try walking forward into it!
+Once you have successfully opened the page on your Quest 3 or other WebXR headset, be sure to clear some space in your living room. Click "Enter VR" and walk around your image!
 
-# Updates
+Yes, it looks like everybody is a handmade doll and the model doesn't try to simulate the back of anything, but it's still very cool.
 
-If you add more images, just run `./photo-to-ply` and `./generate-website` again. Existing files are not regenerated, so if you really want them to be, remove the existing `.ply` files from the `./output` directory first.
+**Use the "Prev" and "Next" buttons to switch between scenes.** You might have to walk back to see them again.
+
+# Adding more images
+
+If you add more images, just run `./convert` and `./generate-website` again. Existing files are not regenerated, so if you really want them to be, remove the existing `.ply` files from the `./output` directory first. However, note that browsers will probably cache the old ones anyway. My advice for that is to change the filenames.
 
 ## "Hey, it's slow"
 
-Yeah, if you don't have an NVIDIA card it'll probably wind up using your CPU rather than your GPU unless you do some patching. So you won't get the "one second" results you may have seen mentioned. But it still does the job in about a minute per image even on my relatively wimpy AMD laptop. And in just 18 seconds on my Macbook Pro! So it's still pretty cool.
+Yeah, if you don't have an NVIDIA card it'll probably wind up using your CPU rather than your GPU unless you do some patching. So you won't get the "one second" results you may have seen mentioned. But it still does the job in about a minute per image even on my relatively wimpy AMD laptop. And in just 18 seconds on my Macbook Pro! Whaddaya want, it's going to space.
+
+## "I found a bug / I have an idea"
+
+Pull requests and github issues welcome. Remember, we have to abide by Apple's license, this is a research tool not a product.
