@@ -107,5 +107,5 @@ If you encounter a bug outside of the `sharp` command itself, please submit [an 
 # Thanks
 
 * Thanks to Apple, of course, for allowing research use of `ml-sharp`.
-* Thanks to the ThreeJS team.
+* Thanks to the [ThreeJS](https://threejs.org/) team.
 * Thanks to Felix Hirt for the [Gaussian Decimator](https://github.com/feel3x/Gaussian_Decimator) utility, used here to simplify the splat files just enough for a good experience on the Quest 3.
