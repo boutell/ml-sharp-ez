@@ -1,0 +1,98 @@
+#!/bin/bash
+
+if [ -z "$( ls -A './output' )" ]; then
+  echo "No files found in the ./output folder, exiting quietly"
+  exit 0
+fi
+
+rm -rf ./website || exit 1
+mkdir -p ./website || exit 1
+
+cat <<EOM > "./website/index.html" || exit 1 
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<title>ML — Sharp VR Album</title>
+</head>
+<body>
+<h1>ML — Sharp VR Album</h1>
+<p>NOTE: for the Quest 3 I recommend the "reduced" links, otherwise you will experience unpleasant juddering.</p>
+<ul>
+$(for file in ./output/*; do
+  BASE=`basename "$file" .ply`
+  HTML="$BASE.html"
+  cp $file ./website
+  echo "<li><a href=\"$HTML\">$BASE</a></li>"
+done)
+</ul>
+</body>
+EOM
+
+for file in ./output/*; do
+  BASE=`basename "$file" .ply`
+  HTML="$BASE.html"
+  PLY=`basename "$file"`
+  cat <<EOM > "./website/$HTML" || exit 1
+<!DOCTYPE html>
+<style> body {margin: 0;} </style>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.178.0/examples/jsm/",
+      "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/0.1.10/spark.module.js"
+    }
+  }
+</script>
+<script type="module">
+  import * as THREE from "three";
+  import { VRButton } from 'three/addons/webxr/VRButton.js';
+  import { SplatMesh } from "@sparkjsdev/spark";
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  // Set camera position for desktop preview (VR headset will override this)
+  camera.position.set(0, 1.5, 0);
+  camera.lookAt(0, 1.5, -1);  // Look at where the splat is
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+  
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+  
+  renderer.xr.enabled = true;
+  renderer.xr.setReferenceSpaceType('local-floor');
+
+  // Add orbit controls for desktop
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 1.5, -1);  // Look at the splat
+  controls.update();
+
+  const splatURL = "$PLY";
+
+  const butterfly = new SplatMesh({ 
+    url: splatURL,
+    enableControls: false,
+    halfPrecision: true,
+    antialiased: false
+  });
+  
+  // Back in front of you
+  butterfly.position.set(0, 1.5, -1);
+  
+  // Right-side up AND facing you (rotate 180 degrees around Y axis too)
+  butterfly.rotation.set(0, Math.PI, Math.PI);
+  
+  butterfly.scale.set(0.3, 0.3, 0.3);
+  
+  scene.add(butterfly);
+
+  document.body.appendChild(VRButton.createButton(renderer));
+
+  renderer.setAnimationLoop(function() {
+    renderer.render(scene, camera);
+  });
+</script>
+EOM
+done

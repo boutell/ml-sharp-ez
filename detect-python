@@ -6,3 +6,13 @@ else
   echo "Can't find python 3.x on your system. Install it as python3 or python."
   exit 1
 fi
+
+echo "python is $PYTHON"
+if [ ! -d "./python-env" ]; then
+  $PYTHON -m venv ./python-env || exit 1
+fi
+
+source ./python-env/bin/activate
+
+echo "Python Version:"
+python --version
