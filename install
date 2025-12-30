@@ -20,4 +20,4 @@
   echo "Folders created"
 ) || exit 1
 
-echo "Great! You are set up to use the ./photo-to-ply script."
+echo "Great! You are ready to put .jpg files in ./input and run ./convert"
