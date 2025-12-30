@@ -8,31 +8,46 @@ fi
 rm -rf ./website || exit 1
 mkdir -p ./website || exit 1
 
+# Copy all reduced PLY files and build JavaScript array
+SPLAT_ARRAY=""
+FIRST_FILE=""
+for file in ./output/*-reduced.ply; do
+  [ -e "$file" ] || continue
+  BASE=$(basename "$file")
+  cp "$file" ./website/
+  if [ -z "$FIRST_FILE" ]; then
+    FIRST_FILE="$BASE"
+    SPLAT_ARRAY="\"$BASE\""
+  else
+    SPLAT_ARRAY="$SPLAT_ARRAY, \"$BASE\""
+  fi
+done
+
+# Create index page
 cat <<EOM > "./website/index.html" || exit 1 
 <!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
-<title>ML — Sharp VR Album</title>
+<title>ML — Sharp VR Album</title>
 </head>
 <body>
 <h1>ML — Sharp VR Album</h1>
-<p>NOTE: for the Quest 3 I recommend the "reduced" links, otherwise you will experience unpleasant juddering.</p>
+<p>View your photo album in VR! Use the PREV/NEXT buttons in VR to navigate between scenes.</p>
+<p><a href="viewer.html">Enter VR Viewer</a></p>
+<h2>Available Scenes:</h2>
 <ul>
-$(for file in ./output/*; do
-  BASE=`basename "$file" .ply`
-  HTML="$BASE.html"
-  cp $file ./website
-  echo "<li><a href=\"$HTML\">$BASE</a></li>"
+$(for file in ./output/*-reduced.ply; do
+  [ -e "$file" ] || continue
+  BASE=$(basename "$file" .ply)
+  BASE=${BASE%-reduced}
+  echo "<li>$BASE</li>"
 done)
 </ul>
 </body>
 EOM
 
-for file in ./output/*; do
-  BASE=`basename "$file" .ply`
-  HTML="$BASE.html"
-  PLY=`basename "$file"`
-  cat <<EOM > "./website/$HTML" || exit 1
+# Create single VR viewer page
+cat <<EOM > "./website/viewer.html" || exit 1
 <!DOCTYPE html>
 <style> body {margin: 0;} </style>
 <script type="importmap">
@@ -49,50 +64,140 @@ for file in ./output/*; do
   import { VRButton } from 'three/addons/webxr/VRButton.js';
   import { SplatMesh } from "@sparkjsdev/spark";
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFactory.js';
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-  // Set camera position for desktop preview (VR headset will override this)
   camera.position.set(0, 1.5, 0);
-  camera.lookAt(0, 1.5, -1);  // Look at where the splat is
+  camera.lookAt(0, 1.5, -1);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-  
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-  
   renderer.xr.enabled = true;
   renderer.xr.setReferenceSpaceType('local-floor');
 
-  // Add orbit controls for desktop
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.target.set(0, 1.5, -1);  // Look at the splat
+  controls.target.set(0, 1.5, -1);
   controls.update();
 
-  const splatURL = "$PLY";
+  const splats = [$SPLAT_ARRAY];
+  let currentIndex = 0;
+  let currentSplat = null;
 
-  const butterfly = new SplatMesh({ 
-    url: splatURL,
-    enableControls: false,
-    halfPrecision: true,
-    antialiased: false
+  function loadSplat(url) {
+    if (currentSplat) scene.remove(currentSplat);
+    
+    currentSplat = new SplatMesh({ 
+      url: url,
+      enableControls: false,
+      halfPrecision: true,
+      antialiased: false
+    });
+    currentSplat.position.set(0, 1.5, -1);
+    currentSplat.rotation.set(0, Math.PI, Math.PI);
+    currentSplat.scale.set(0.3, 0.3, 0.3);
+    scene.add(currentSplat);
+  }
+
+  function createButton(text, position, onClick) {
+    const geometry = new THREE.PlaneGeometry(0.3, 0.1);
+    const material = new THREE.MeshBasicMaterial({ color: 0x4444ff });
+    const button = new THREE.Mesh(geometry, material);
+    button.position.copy(position);
+    
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 48px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 128, 64);
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    const textMaterial = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+    const textMesh = new THREE.Mesh(geometry, textMaterial);
+    textMesh.position.z = 0.01;
+    button.add(textMesh);
+    
+    button.userData.onClick = onClick;
+    button.userData.isButton = true;
+    
+    return button;
+  }
+
+  const prevButton = createButton('PREV', new THREE.Vector3(-0.3, 1.3, -0.5), () => {
+    currentIndex = (currentIndex - 1 + splats.length) % splats.length;
+    loadSplat(splats[currentIndex]);
+  });
+  scene.add(prevButton);
+
+  const nextButton = createButton('NEXT', new THREE.Vector3(0.3, 1.3, -0.5), () => {
+    currentIndex = (currentIndex + 1) % splats.length;
+    loadSplat(splats[currentIndex]);
+  });
+  scene.add(nextButton);
+
+  const controllerModelFactory = new XRControllerModelFactory();
+  const raycaster = new THREE.Raycaster();
+  
+  // Desktop mouse click support
+  const mouse = new THREE.Vector2();
+  window.addEventListener('click', (event) => {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children, true);
+    for (let intersect of intersects) {
+      let obj = intersect.object;
+      while (obj.parent && !obj.userData.isButton) obj = obj.parent;
+      if (obj.userData.isButton && obj.userData.onClick) {
+        obj.userData.onClick();
+        break;
+      }
+    }
   });
   
-  // Back in front of you
-  butterfly.position.set(0, 1.5, -1);
-  
-  // Right-side up AND facing you (rotate 180 degrees around Y axis too)
-  butterfly.rotation.set(0, Math.PI, Math.PI);
-  
-  butterfly.scale.set(0.3, 0.3, 0.3);
-  
-  scene.add(butterfly);
+  for (let i = 0; i <= 1; i++) {
+    const controller = renderer.xr.getController(i);
+    
+    const geometry = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0, 0, -1)
+    ]);
+    const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xffffff }));
+    controller.add(line);
+    
+    controller.addEventListener('selectstart', () => {
+      raycaster.setFromXRController(controller);
+      const intersects = raycaster.intersectObjects(scene.children, true);
+      for (let intersect of intersects) {
+        let obj = intersect.object;
+        while (obj.parent && !obj.userData.isButton) obj = obj.parent;
+        if (obj.userData.isButton && obj.userData.onClick) {
+          obj.userData.onClick();
+          break;
+        }
+      }
+    });
+    
+    scene.add(controller);
+    
+    const grip = renderer.xr.getControllerGrip(i);
+    grip.add(controllerModelFactory.createControllerModel(grip));
+    scene.add(grip);
+  }
 
+  loadSplat(splats[0]);
   document.body.appendChild(VRButton.createButton(renderer));
 
   renderer.setAnimationLoop(function() {
+    controls.update();
     renderer.render(scene, camera);
   });
 </script>
 EOM
-done
+
+echo "Website generated successfully in ./website/"
