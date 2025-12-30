@@ -1,6 +1,10 @@
-`ml-sharp-ez` helps you take a collection of still images and turn them into "3-D splat" scenes you can explore in VR.
+`ml-sharp-ez` helps you take a collection of still images and turn them into "3-D splat" scenes you can explore in VR, using any WebXR-capable device, such as an Oculus Quest 3 (tested) or Apple Vision Pro (untested).
 
 This package is intended to democratize participation in 2d-3d image conversion research by easing the use of Apple's [ml-sharp model](https://github.com/apple/ml-sharp), which converts still images into 3d splat files in `.ply` format. This package then packs them up as a little WebXR application for headsets. It's pretty cool, but keep in mind you [must still abide by Apple's license for the model](https://github.com/apple/ml-sharp/blob/main/LICENSE_MODEL).
+
+# Setting expectations
+
+The results are really neat! It's like being inside a needlepoint "painting." But, the results are not high definition and the model doesn't try too hard to predict things that aren't part of the original image. Also, see below re: intentional resolution reductions to allow the Quest 3 to handle it.
 
 # Before you install
 
@@ -93,6 +97,12 @@ Yeah, if you don't have an NVIDIA card it'll probably wind up using your CPU rat
 Pull requests and github issues welcome. Remember, we have to abide by Apple's license, this is a research tool not a product.
 
 Contributions to get the GPU working for more people more of the time would be great.
+
+## How do I participate in research?
+
+Apple's license doesn't specify what research might look like for each person. I suggest providing **helpful, constructive** feedback on interesting results as well as `ml-sharp-ez` bugs via [github issues on ml-sharp](https://github.com/apple/ml-sharp/issues).
+
+If you encounter a bug outside of the `sharp` command itself, please submit [an issue on ml-sharp-ez](https://github.com/boutell/ml-sharp-ez/issues) instead.
 
 ## Thanks
 
