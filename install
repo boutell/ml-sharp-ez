@@ -6,13 +6,22 @@
   fi
   source ./detect-python
   cd ml-sharp &&
+  pip --version &&
+  echo "Installing requirements with pip" &&
   pip install -r requirements.txt &&
-
-  if [ ! -d "Gaussian_Decimator" ]; then
-    git clone https://github.com/feel3x/Gaussian_Decimator || exit 1
-  fi
+  # Use subshell so that && is respected
+  (
+    if [[ -d "./Gaussian_Decimator" ]]; then
+      echo "Gaussian_Decimator already present"
+    else
+      echo "Installing Gaussian_Decimator" &&
+      git clone https://github.com/feel3x/Gaussian_Decimator || exit 1
+    fi
+  ) &&
   cd Gaussian_Decimator/ &&
+  echo "Installing torch-scatter" &&
   pip install torch-scatter -f https://data.pyg.org/whl/torch-2.8.0+cpu.html &&
+  echo "Installing dependencies for Gaussian_Decimator" &&
   pip install -r requirements.txt &&
   cd ../.. &&
   mkdir -p input &&

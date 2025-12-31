@@ -1,18 +1,27 @@
-if command -v python3 &> /dev/null && python3 --version 2>&1 | grep -q "^Python 3\."; then
-  PYTHON=python3
-elif command -v python &> /dev/null && python --version 2>&1 | grep -q "^Python 3\."; then
-  PYTHON=python
-else
-  echo "Can't find python 3.x on your system. Install it as python3 or python."
+# Version currently required by ml-sharp is 3.13 series, not newer or older
+VERSION=3.13
+
+export PYENV_ROOT="$PWD/pyenv"
+if [[ ! -d $PYENV_ROOT/bin ]]; then
+  echo "Attempting to install pyenv"
+  (curl -fsSL https://pyenv.run | bash) || exit 1
+  echo "^ You may ignore warnings about adding pyenv to your PATH"
+fi
+
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - bash)"
+eval "$(pyenv virtualenv-init -)"
+
+if ! command -v pyenv > /dev/null; then
+  echo "Failed to set up pyenv."
   exit 1
 fi
 
-echo "python is $PYTHON"
-if [ ! -d "./python-env" ]; then
-  $PYTHON -m venv ./python-env || exit 1
-fi
+ls $PYENV_ROOT/versions/$VERSION.* || pyenv install $VERSION || exit 1
 
-source ./python-env/bin/activate
+pyenv shell $VERSION || exit 1
 
-echo "Python Version:"
-python --version
+echo "printing python location"
+which python
+
+echo "** python is ready"

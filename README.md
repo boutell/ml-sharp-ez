@@ -8,13 +8,35 @@ The results are really neat! It's like being inside a needlepoint "painting." Bu
 
 # Before you install
 
-* You must have MacOS, Linux, WSL or similar. Unfortunately these scripts won't run on vanilla Windows.
-* Make sure you have Python 3.x available as either `python3` or `python` (try `python3 --version` and `python --version`).
-* If you are on Debian Linux and perhaps other distros, you may need to separately install `venv` support:
+## OS requirements
+
+You must have MacOS, Linux, WSL or similar. Unfortunately these scripts won't run on vanilla Windows.
+
+## Build environment
+
+You need a build environment.
+
+* For Mac, install the xcode dev tools:
 
 ```bash
-# I had to do this on Debian 13
-sudo apt-get install python3-venv
+xcode-select --install
+```
+
+* For Ubuntu- or Debian-flavored Linux, install the needed dependencies for `pyenv` to build Python with all the trimmings:
+
+```bash
+sudo apt install -y build-essential zlib1g-dev libssl-dev libbz2-dev \
+  libreadline-dev libsqlite3-dev curl libncursesw5-dev xz-utils tk-dev \
+  libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+```
+
+* For Red Hat-flavored Linux:
+
+```bash
+sudo dnf groupinstall "Development Tools"
+sudo dnf install -y zlib-devel openssl-devel bzip2-devel \
+  readline-devel sqlite-devel curl ncurses-devel xz-devel \
+  tk-devel libxml2-devel xmlsec1-devel libffi-devel xz-devel
 ```
 
 # Installing
